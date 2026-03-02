@@ -9,7 +9,7 @@ LIBFT = $(LIBFT_DIR)/libft.a
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -I$(INCDIR) -I$(LIBFT_DIR)
 
-SRC = philoo.c utils.c
+SRC = main.c parse.c
 OBJ = $(addprefix $(OBJDIR)/, $(SRC:.c=.o))
 
 ################################################################################

@@ -6,7 +6,7 @@
 /*   By: rpinheir <rpinheir@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 13:38:56 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/02/23 13:43:22 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/02/25 14:10:33 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,48 @@
 # define PHILO_H
 
 # include "../libft/libft.h"
+# include <bits/pthreadtypes.h>
+# include <fcntl.h>
+# include <limits.h>
 # include <pthread.h>
+# include <stdarg.h>
 # include <stdbool.h>
 # include <stdio.h>
+# include <stdlib.h>
 # include <sys/time.h>
 # include <unistd.h>
+
+typedef pthread_mutex_t	t_mtx;
+
+typedef struct s_fork
+{
+	t_mtx				fork;
+	long				fork_id;
+}						t_fork;
+
+typedef struct s_philo
+{
+	long				id;
+	long				time_to_die;
+	long				meals;
+	bool				finished_eating;
+	long				last_meal_time;
+	t_fork				*left_fork;
+	t_fork				*right_fork;
+	pthread_t			thread_id;
+}						t_philo;
+
+typedef struct s_table
+{
+	t_philo				philos;
+	t_fork				forks;
+	long				nbr_philo;
+	long				time_to_die;
+	long				time_to_eat;
+	long				time_to_sleep;
+	long				max_nbr_meals;
+	long				time_start_sim;
+	bool				end_simulation;
+}						t_table;
+bool					input_validate(int argc, char **argv);
 #endif
