@@ -6,7 +6,7 @@
 /*   By: rpinheir <rpinheir@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 13:38:56 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/02/25 14:10:33 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/03/02 14:45:12 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,14 @@ typedef struct s_table
 	long				time_start_sim;
 	bool				end_simulation;
 }						t_table;
-bool					input_validate(int argc, char **argv);
+
+/*
+ *			PROTOTYPE
+ * */
+
+long					ft_atol(const char *str);
+long long				ft_atoll(const char *str);
+bool					is_digit(char c);
+void					exit_error(const char *msg);
+void					input_parser(t_table *table, char **argv);
 #endif

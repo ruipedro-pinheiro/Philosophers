@@ -1,27 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rpinheir <rpinheir@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: rpinheir <rpinhier@student.42Lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/23 13:37:38 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/03/02 14:33:20 by rpinheir         ###   ########.ch       */
+/*   Created: 2026/03/02 12:07:08 by rpinheir          #+#    #+#             */
+/*   Updated: 2026/03/02 12:15:43 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-int	main(int argc, char **argv)
+void	exit_error(const char *msg)
 {
-	t_table	table;
-
-	if (argc != 5 && argc != 6)
-	{
-		write(1, "No enough arguments.\n Example: ./philo 5 800 200 200 [5]\n",
-			57);
-		write(1, &argv[0], 5);
-	}
-	input_parser(&table, argv);
-	return (1);
+	printf("%s\n", msg);
 }

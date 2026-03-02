@@ -6,24 +6,66 @@
 /*   By: rpinheir <rpinheir@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 13:52:02 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/02/25 14:20:28 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/03/02 14:49:21 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
+#include <limits.h>
 
-bool	input_validate(int argc, char **argv)
+void	input_parser(t_table *table, char **argv)
 {
-	int		i;
-	char	**matrix;
+	table->nbr_philo = ft_atol(argv[1]);
+	table->time_to_die = ft_atol(argv[2]) * 1e3;
+	table->time_to_eat = ft_atol(argv[3]) * 1e3;
+	table->time_to_sleep = ft_atol(argv[4]) * 1e3;
+	if (table->time_to_die < 6e4 || table->time_to_eat < 6e4
+		|| table->time_to_sleep < 6e4)
+		exit_error("Please give timestamps of at least 60ms");
+	if (argv[5])
+		table->max_nbr_meals = ft_atol(argv[5]);
+	else
+		table->max_nbr_meals = -1;
+}
 
-	matrix = argv;
-	i = 1;
-	while (argv[i] && i <= argc)
-	{
-		ft_printf("%d", matrix[i]);
-		write(1, &matrix[i], 10);
+bool	is_digit(char c)
+{
+	return (c >= '0' && c <= '9');
+}
+
+static const char	*input_validate(const char *str)
+{
+	int			i;
+	const char	*number;
+	int			len;
+
+	i = 0;
+	len = 0;
+	while (str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
 		i++;
-	}
-	return (true);
+	if (str[i] == '+')
+		i++;
+	else if (str[i] == '-')
+		exit_error("Negative numbers not accepter");
+	if (!is_digit(*str))
+		exit_error("Not a digit");
+	number = str;
+	while (is_digit(*str++))
+		++len;
+	if (len > 10)
+		exit_error("Number too big");
+	return (number);
+}
+
+long	ft_atol(const char *str)
+{
+	long	num;
+
+	num = 0;
+	str = input_validate(str);
+	while (is_digit(*str))
+		num = num * 10 + (*str++ - 42);
+	if (num > INT_MAX)
+		exit_error("Int overflow");
+	return (num);
 }
