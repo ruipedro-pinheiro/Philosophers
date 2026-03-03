@@ -55,12 +55,15 @@ typedef struct s_philo
 	t_fork				*left_fork;
 	t_fork				*right_fork;
 	pthread_t			thread_id;
+	struct s_table		*table;
 }						t_philo;
 
 typedef struct s_table
 {
-	t_philo				philos;
-	t_fork				forks;
+	t_philo				*philos;
+	t_fork				*forks;
+	t_mtx				table_mutex;
+	t_mtx				write_mutex;
 	long				nbr_philo;
 	long				time_to_die;
 	long				time_to_eat;
@@ -78,8 +81,9 @@ long					ft_atol(const char *str);
 
 bool					is_digit(char c);
 
-void					exit_error(const char *msg);
-void					input_parser(t_table *table, char **argv);
+int						exit_error(const char *msg);
+int						input_parser(t_table *table, char **argv);
+int						data_init(t_table *table);
 void					*safe_malloc(size_t bytes);
 
 void					thread_error_handler(int status, t_opcode opcode);

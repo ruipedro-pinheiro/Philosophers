@@ -13,19 +13,23 @@
 #include "../include/philo.h"
 #include <limits.h>
 
-void	input_parser(t_table *table, char **argv)
+int	input_parser(t_table *table, char **argv)
 {
 	table->nbr_philo = ft_atol(argv[1]);
 	table->time_to_die = ft_atol(argv[2]) * 1e3;
 	table->time_to_eat = ft_atol(argv[3]) * 1e3;
 	table->time_to_sleep = ft_atol(argv[4]) * 1e3;
-	// if (table->time_to_die < 6e4 || table->time_to_eat < 6e4
-	//	|| table->time_to_sleep < 6e4)
-	// s	exit_error("Please give timestamps of at least 60ms");
+	if (table->nbr_philo < 0 || table->time_to_die < 0 || table->time_to_eat < 0 || table->time_to_sleep < 0)
+		return (1);
 	if (argv[5])
+	{
 		table->max_nbr_meals = ft_atol(argv[5]);
+		if (table->max_nbr_meals < 0)
+			return (1);
+	}
 	else
 		table->max_nbr_meals = -1;
+	return (0);
 }
 
 bool	is_digit(char c)
@@ -39,17 +43,21 @@ static const char	*input_validate(const char *str)
 	int			i;
 
 	i = 0;
-	while (str[i++] == ' ' || (str[i++] >= 9 && str[i++] <= 13))
+	while (str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
 		i++;
 	if (str[i] == '+')
 		i++;
-	else if (str[i++] == '-')
-		exit_error("Negative numbers not accepter");
-	if (!is_digit(*str))
+	else if (str[i] == '-')
+	{
+		exit_error("Negative numbers not accepted");
+		return (NULL);
+	}
+	if (!is_digit(str[i]))
+	{
 		exit_error("Not a digit");
+		return (NULL);
+	}
 	number = &str[i];
-	while (is_digit(str[i]))
-		i++;
 	return (number);
 }
 
@@ -59,11 +67,14 @@ long	ft_atol(const char *str)
 
 	num = 0;
 	str = input_validate(str);
+	if (!str)
+		return (-1);
 	while (is_digit(*str))
-		num = num * 10 + (*str++ - 42);
+		num = num * 10 + (*str++ - '0');
 	if (num > INT_MAX)
-		exit_error("Int overflow");
-	if (num > INT_MAX)
+	{
 		exit_error("Number bigger than int maximum");
+		return (-1);
+	}
 	return (num);
 }

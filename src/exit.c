@@ -27,7 +27,8 @@ void	*safe_malloc(size_t bytes)
 	return (ret);
 }
 
-void	exit_error(const char *msg)
+int	exit_error(const char *msg)
 {
-	printf("%s\n", msg);
+	printf("Error\n%s\n", msg);
+	return (1);
 }
