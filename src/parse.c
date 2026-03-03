@@ -6,7 +6,7 @@
 /*   By: rpinheir <rpinheir@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 13:52:02 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/03/02 14:47:59 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/03/03 16:26:16 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ void	input_parser(t_table *table, char **argv)
 	table->time_to_die = ft_atol(argv[2]) * 1e3;
 	table->time_to_eat = ft_atol(argv[3]) * 1e3;
 	table->time_to_sleep = ft_atol(argv[4]) * 1e3;
-	if (table->time_to_die < 6e4 || table->time_to_eat < 6e4
-		|| table->time_to_sleep < 6e4)
-		exit_error("Please give timestamps of at least 60ms");
+	// if (table->time_to_die < 6e4 || table->time_to_eat < 6e4
+	//	|| table->time_to_sleep < 6e4)
+	// s	exit_error("Please give timestamps of at least 60ms");
 	if (argv[5])
 		table->max_nbr_meals = ft_atol(argv[5]);
 	else

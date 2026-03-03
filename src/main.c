@@ -6,7 +6,7 @@
 /*   By: rpinheir <rpinheir@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 13:37:38 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/03/03 13:13:50 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/03/03 16:28:30 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,13 @@ int	main(int argc, char **argv)
 	if (argc < 5)
 	{
 		printf("No enough arguments.\n Example: ./philo 5 800 200 200 [5]\n");
+		return (1);
 	}
 	else if (argc > 6)
+	{
 		printf("Too many arguments.\n Example: ./philo 5 800 200 200 [5]\n");
+		return (1);
+	}
 	input_parser(&table, argv);
 	return (1);
 }
