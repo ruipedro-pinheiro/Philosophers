@@ -6,7 +6,7 @@
 /*   By: rpinheir <rpinheir@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 13:38:56 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/03/02 14:45:12 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/03/03 12:53:48 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "../libft/libft.h"
 # include <bits/pthreadtypes.h>
+# include <errno.h>
 # include <fcntl.h>
 # include <limits.h>
 # include <pthread.h>
@@ -26,6 +27,17 @@
 # include <unistd.h>
 
 typedef pthread_mutex_t	t_mtx;
+
+typedef enum opcode
+{
+	LOCK,
+	UNLOCK,
+	INIT,
+	DESTROY,
+	CREATE,
+	JOIN,
+	DETACH,
+}						t_opcode;
 
 typedef struct s_fork
 {
@@ -63,8 +75,18 @@ typedef struct s_table
  * */
 
 long					ft_atol(const char *str);
-long long				ft_atoll(const char *str);
+
 bool					is_digit(char c);
+
 void					exit_error(const char *msg);
 void					input_parser(t_table *table, char **argv);
+void					*safe_malloc(size_t bytes);
+
+void					thread_error_handler(int status, t_opcode opcode);
+void					thread_handler(pthread_t *thread, void *(*foo)(void *),
+							void *data, t_opcode opcode);
+
+void					mutex_error_handler(int status, t_opcode opcode);
+void					mutex_handler(t_mtx *mutex, t_opcode opcode);
+
 #endif

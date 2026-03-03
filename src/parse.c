@@ -6,7 +6,7 @@
 /*   By: rpinheir <rpinheir@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 13:52:02 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/03/02 14:49:21 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/03/02 14:47:59 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,25 +35,21 @@ bool	is_digit(char c)
 
 static const char	*input_validate(const char *str)
 {
-	int			i;
 	const char	*number;
-	int			len;
+	int			i;
 
 	i = 0;
-	len = 0;
-	while (str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
+	while (str[i++] == ' ' || (str[i++] >= 9 && str[i++] <= 13))
 		i++;
 	if (str[i] == '+')
 		i++;
-	else if (str[i] == '-')
+	else if (str[i++] == '-')
 		exit_error("Negative numbers not accepter");
 	if (!is_digit(*str))
 		exit_error("Not a digit");
-	number = str;
-	while (is_digit(*str++))
-		++len;
-	if (len > 10)
-		exit_error("Number too big");
+	number = &str[i];
+	while (is_digit(str[i]))
+		i++;
 	return (number);
 }
 
@@ -67,5 +63,7 @@ long	ft_atol(const char *str)
 		num = num * 10 + (*str++ - 42);
 	if (num > INT_MAX)
 		exit_error("Int overflow");
+	if (num > INT_MAX)
+		exit_error("Number bigger than int maximum");
 	return (num);
 }
