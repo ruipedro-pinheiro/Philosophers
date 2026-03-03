@@ -3,12 +3,12 @@
 # Description 
 The project **Philosophers** or more well known outside of 42 as the ***dining philosophers problem***, is a project were the main notions to learn are mutexes, multi-threading and managing both at the same time. 
 
-The project is theorical "simple", as one philosopher is one thread and each philosopher fork is a mutexe, and the challenge is to provide each thread it's own mutex, so, each philosopher has his own fork but needs also another fork, which will be the nearbiest. They will have to eat -> sleep -> think, and if they dont eat for some given time, they will die.
+The project is theorically "simple", as one philosopher is one thread and each philosopher fork is a mutex, and the challenge is to provide each thread it's own mutex, so, each philosopher has his own fork but needs also another fork, which will be the nearbiest. They will have to eat -> sleep -> think, and if they dont eat for some given time, they will die.
 
 # Instructions
 #### Build the code with:
 ```bash
-	make
+make
 ```
 <br>
 And specify timestamps, while the [5] being optional.<br>
@@ -21,7 +21,7 @@ And specify timestamps, while the [5] being optional.<br>
 5 =   If all philosophers have eaten at least 5 times, the simulation stops<br>
 
 ```bash
-	./philo 5 800 200 200 \[5]
+./philo 5 800 200 200 5
 ```
 
 # Resources
