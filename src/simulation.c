@@ -6,7 +6,7 @@
 /*   By: rpinheir <rpinheir@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:08:39 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/03/04 15:27:57 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/03/05 15:05:47 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ void	start_dinner(t_table *table)
 		while (++i < table->nbr_philo)
 			thread_handler(&table->philos[i].thread_id, simulation,
 				&table->philos[i], CREATE);
+		while (++i < table->nbr_philo)
+			mutex_handler(table->mutex, INIT);
 	}
 	set_bool(&table->table_mutex, &table->all_threads_ready, true);
 }

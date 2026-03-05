@@ -6,11 +6,12 @@
 /*   By: rpinheir <rpinheir@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 13:37:38 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/03/04 15:47:36 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/03/05 13:26:19 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
+#include <stdlib.h>
 
 int	main(int argc, char **argv)
 {
@@ -18,12 +19,12 @@ int	main(int argc, char **argv)
 
 	if (argc < 5)
 	{
-		printf("Error\nNot enough arguments.\nExample: ./philo 5 800 200 200 [5]\n");
+		exit_error("Not enough arguments.\nExample: ./philo 5 800 200 200 [5]");
 		return (1);
 	}
 	else if (argc > 6)
 	{
-		printf("Error\nToo many arguments.\nExample: ./philo 5 800 200 200 [5]\n");
+		exit_error("Too many arguments.\nExample: ./philo 5 800 200 200 [5]");
 		return (1);
 	}
 	if (input_parser(&table, argv) != 0)

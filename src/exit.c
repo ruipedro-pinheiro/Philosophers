@@ -6,7 +6,7 @@
 /*   By: rpinheir <rpinhier@student.42Lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 12:07:08 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/03/03 16:03:47 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/03/05 13:25:59 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,6 @@ void	*safe_malloc(size_t bytes)
 
 int	exit_error(const char *msg)
 {
-	printf("Error\n%s\n", msg);
+	printf("Error: %s\n", msg);
 	return (1);
 }
