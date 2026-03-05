@@ -6,7 +6,7 @@
 /*   By: rpinheir <rpinheir@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 13:38:56 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/03/03 12:53:48 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/03/04 15:56:49 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ typedef struct s_table
 	long				time_to_sleep;
 	long				max_nbr_meals;
 	long				time_start_sim;
+	bool				all_threads_ready;
 	bool				end_simulation;
 }						t_table;
 
@@ -84,13 +85,18 @@ bool					is_digit(char c);
 int						exit_error(const char *msg);
 int						input_parser(t_table *table, char **argv);
 int						data_init(t_table *table);
-void					*safe_malloc(size_t bytes);
 
+void					*safe_malloc(size_t bytes);
 void					thread_error_handler(int status, t_opcode opcode);
 void					thread_handler(pthread_t *thread, void *(*foo)(void *),
 							void *data, t_opcode opcode);
-
 void					mutex_error_handler(int status, t_opcode opcode);
 void					mutex_handler(t_mtx *mutex, t_opcode opcode);
+void					wait_all_threads(t_table *table);
 
+void					set_bool(t_mtx *mutex, bool *dest, bool value);
+bool					get_bool(t_mtx *mutex, bool *value);
+void					set_long(t_mtx *mutex, long *dest, long value);
+long					get_long(t_mtx *mutex, long *value);
+bool					simulation_finished(t_table *table);
 #endif

@@ -6,7 +6,7 @@
 /*   By: rpinheir <rpinhier@student.42Lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/03 12:12:08 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/03/03 13:17:28 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/03/04 15:27:23 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,9 @@ int	data_init(t_table *table)
 
 	i = -1;
 	table->end_simulation = false;
+	table->all_threads_ready = false;
 	table->philos = safe_malloc(sizeof(t_philo) * table->nbr_philo);
-	if (!table->philos)
-		return (1);
 	table->forks = safe_malloc(sizeof(t_fork) * table->nbr_philo);
-	if (!table->forks)
-		return (free(table->philos), 1);
 	mutex_handler(&table->table_mutex, INIT);
 	mutex_handler(&table->write_mutex, INIT);
 	while (++i < table->nbr_philo)
