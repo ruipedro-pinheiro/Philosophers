@@ -16,6 +16,7 @@
 #include <fcntl.h>
 #include <pthread.h>
 #include <stdlib.h>
+#include <sys/time.h>
 
 void	*safe_malloc(size_t bytes)
 {
@@ -31,4 +32,21 @@ int	exit_error(const char *msg)
 {
 	printf("Error: %s\n", msg);
 	return (1);
+}
+
+long	get_time(t_timecode timecode)
+{
+	struct timeval	tv;
+
+	if (gettimeofday(&tv, NULL) == -1)
+		exit_error("Could not get time of day");
+	if (SECOND == timecode)
+		return (tv.tv_sec + (tv.tv_usec / 1e6));
+	else if (MILLISECOND == timecode)
+		return (tv.tv_sec + (tv.tv_usec / 1e3));
+	else if (MICROSECOND == timecode)
+		return (tv.tv_sec * 1e6 + tv.tv_usec);
+	else
+		exit_error("Wrong timecode");
+	return (0);
 }

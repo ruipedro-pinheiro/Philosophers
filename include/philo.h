@@ -39,6 +39,13 @@ typedef enum opcode
 	DETACH,
 }						t_opcode;
 
+typedef enum e_timecode
+{
+	SECOND,
+	MILLISECOND,
+	MICROSECOND,
+}						t_timecode;
+
 typedef struct s_fork
 {
 	t_mtx				fork;

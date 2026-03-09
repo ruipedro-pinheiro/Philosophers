@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../include/philo.h"
+#include <sys/time.h>
 
 void	*simulation(void *data)
 {
@@ -30,7 +31,9 @@ void	start_dinner(t_table *table)
 		return ;
 	if (table->nbr_philo == 1)
 	{
-		// TODO
+		thread_handler(&table->philos[i].thread_id, simulation,
+			&table->philos[i], CREATE);
+		mutex_handler(&table->table_mutex, INIT);
 	}
 	else
 	{
@@ -38,7 +41,7 @@ void	start_dinner(t_table *table)
 			thread_handler(&table->philos[i].thread_id, simulation,
 				&table->philos[i], CREATE);
 		while (++i < table->nbr_philo)
-			mutex_handler(table->mutex, INIT);
+			mutex_handler(&table->table_mutex, INIT);
 	}
 	set_bool(&table->table_mutex, &table->all_threads_ready, true);
 }
