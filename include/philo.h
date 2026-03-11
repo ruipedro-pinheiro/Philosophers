@@ -106,4 +106,6 @@ bool					get_bool(t_mtx *mutex, bool *value);
 void					set_long(t_mtx *mutex, long *dest, long value);
 long					get_long(t_mtx *mutex, long *value);
 bool					simulation_finished(t_table *table);
+long					get_time(t_timecode timecode);
+void					start_dinner(t_table *table);
 #endif

@@ -13,12 +13,49 @@
 #include "../include/philo.h"
 #include <sys/time.h>
 
+void	do_eat(t_philo *philo)
+{
+	long	timestamp;
+
+	timestamp = get_time(MILLISECOND);
+	printf("%ld", timestamp);
+	printf("%ld", philo->id);
+	printf("is eating");
+}
+
+void	do_sleep(t_philo *philo)
+{
+	long	timestamp;
+
+	timestamp = get_time(MILLISECOND);
+	printf("%ld", timestamp);
+	printf("%ld", philo->id);
+	printf("is sleeping");
+}
+
+void	do_think(t_philo *philo)
+{
+	long	timestamp;
+
+	timestamp = get_time(MILLISECOND);
+	printf("%ld", timestamp);
+	printf("%ld", philo->id);
+	printf("is thinking");
+}
+
 void	*simulation(void *data)
 {
 	t_philo	*philo;
 
 	philo = (t_philo *)data;
 	wait_all_threads(philo->table);
+	while (!simulation_finished(philo->table))
+	{
+		do_eat(philo);
+		do_sleep(philo);
+		do_think(philo);
+	}
+	printf("end of simulation");
 	return (NULL);
 }
 
@@ -28,7 +65,10 @@ void	start_dinner(t_table *table)
 
 	i = -1;
 	if (table->max_nbr_meals == 0)
+	{
+		printf("no meals");
 		return ;
+	}
 	if (table->nbr_philo == 1)
 	{
 		thread_handler(&table->philos[i].thread_id, simulation,
@@ -37,6 +77,7 @@ void	start_dinner(t_table *table)
 	}
 	else
 	{
+		printf("start of simulation");
 		while (++i < table->nbr_philo)
 			thread_handler(&table->philos[i].thread_id, simulation,
 				&table->philos[i], CREATE);
@@ -44,4 +85,5 @@ void	start_dinner(t_table *table)
 			mutex_handler(&table->table_mutex, INIT);
 	}
 	set_bool(&table->table_mutex, &table->all_threads_ready, true);
+	printf("all philos are ready");
 }
