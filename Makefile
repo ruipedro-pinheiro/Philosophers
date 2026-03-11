@@ -9,7 +9,7 @@ LIBFT = $(LIBFT_DIR)/libft.a
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -I$(INCDIR) -I$(LIBFT_DIR)
 
-SRC = main.c parse.c exit.c data_init.c safe_functions.c mtx_set_get.c simulation.c sync_utils.c
+SRC = main.c parse.c utils.c data_init.c safe_functions.c mtx_set_get.c simulation.c sync_utils.c
 OBJ = $(addprefix $(OBJDIR)/, $(SRC:.c=.o))
 
 ################################################################################
