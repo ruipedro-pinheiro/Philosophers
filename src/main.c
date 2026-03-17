@@ -31,6 +31,7 @@ int	main(int argc, char **argv)
 		return (1);
 	if (data_init(&table) != 0)
 		return (1);
+	start_dinner(&table);
 	free(table.philos);
 	free(table.forks);
 	return (0);
