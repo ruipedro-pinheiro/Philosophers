@@ -18,6 +18,22 @@
 #include <stdlib.h>
 #include <sys/time.h>
 
+void	get_end_simulation(t_table *table)
+{
+	int	i;
+
+	i = -1;
+	while (++i < table->nbr_philo)
+	{
+		if (table->philos[i].last_meal_time >= table->philos[i].time_to_die)
+			set_bool(&table->table_mutex, &table->end_simulation, true);
+		if (table->philos[i].last_meal_time >= table->time_start_sim)
+			set_bool(&table->table_mutex, &table->end_simulation, true);
+		else if (table->philos[i].meals >= table->max_nbr_meals)
+			set_bool(&table->table_mutex, &table->end_simulation, true);
+	}
+}
+
 void	*safe_malloc(size_t bytes)
 {
 	void	*ret;

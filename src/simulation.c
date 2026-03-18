@@ -18,9 +18,18 @@ void	do_eat(t_philo *philo)
 	long	timestamp;
 
 	timestamp = get_time(MILLISECOND);
-	printf("%ld ", timestamp);
-	printf("%ld ", philo->id);
-	printf("is eating\n");
+	// lock both forks for time_to_eat
+	mutex_handler(&philo->left_fork->fork, LOCK);
+	printf("%ld took left fork %ld\n", philo->id, philo->left_fork->fork_id);
+	mutex_handler(&philo->right_fork->fork, LOCK);
+	printf("%ld took right fork %ld\n", philo->id, philo->right_fork->fork_id);
+	philo->meals += 1;
+	philo->last_meal_time = timestamp;
+	printf("%ld %ld is eating\n", timestamp, philo->id);
+	mutex_handler(&philo->left_fork->fork, UNLOCK);
+	printf("%ld put left fork %ld\n", philo->id, philo->left_fork->fork_id);
+	mutex_handler(&philo->right_fork->fork, UNLOCK);
+	printf("%ld put right fork %ld\n", philo->id, philo->right_fork->fork_id);
 }
 
 void	do_sleep(t_philo *philo)
@@ -28,9 +37,8 @@ void	do_sleep(t_philo *philo)
 	long	timestamp;
 
 	timestamp = get_time(MILLISECOND);
-	printf("%ld ", timestamp);
-	printf("%ld ", philo->id);
-	printf("is sleeping\n");
+	usleep(philo->table->time_to_sleep);
+	printf("%ld %ld is sleeping\n", timestamp, philo->id);
 }
 
 void	do_think(t_philo *philo)
@@ -38,9 +46,7 @@ void	do_think(t_philo *philo)
 	long	timestamp;
 
 	timestamp = get_time(MILLISECOND);
-	printf("%ld ", timestamp);
-	printf("%ld ", philo->id);
-	printf("is thinking\n");
+	printf("%ld %ld is thinking\n", timestamp, philo->id);
 }
 
 void	*simulation(void *data)
@@ -55,7 +61,6 @@ void	*simulation(void *data)
 		do_sleep(philo);
 		do_think(philo);
 	}
-	printf("end of simulation\n");
 	return (NULL);
 }
 
@@ -71,8 +76,8 @@ void	start_dinner(t_table *table)
 	}
 	if (table->nbr_philo == 1)
 	{
-		thread_handler(&table->philos[i].thread_id, simulation,
-			&table->philos[i], CREATE);
+		thread_handler(&table->philos[0].thread_id, simulation,
+			&table->philos[0], CREATE);
 		mutex_handler(&table->table_mutex, INIT);
 	}
 	else
@@ -84,10 +89,11 @@ void	start_dinner(t_table *table)
 			mutex_handler(&table->table_mutex, INIT);
 	}
 	printf("start of simulation\n");
-	table->time_start_sim = get_time(SECOND);
+	table->time_start_sim = get_time(MILLISECOND);
 	set_bool(&table->table_mutex, &table->all_threads_ready, true);
 	printf("all philos are ready\n");
 	i = -1;
 	while (++i < table->nbr_philo)
 		thread_handler(&table->philos[i].thread_id, NULL, NULL, JOIN);
+	printf("end of simulation\n");
 }

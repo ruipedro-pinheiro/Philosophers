@@ -30,10 +30,12 @@ typedef pthread_mutex_t	t_mtx;
 
 typedef enum opcode
 {
+	// mutexes
 	LOCK,
 	UNLOCK,
 	INIT,
 	DESTROY,
+	// threads
 	CREATE,
 	JOIN,
 	DETACH,
@@ -108,4 +110,6 @@ long					get_long(t_mtx *mutex, long *value);
 bool					simulation_finished(t_table *table);
 long					get_time(t_timecode timecode);
 void					start_dinner(t_table *table);
+void					get_end_simulation(t_table *table);
+
 #endif
