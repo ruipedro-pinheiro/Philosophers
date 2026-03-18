@@ -20,16 +20,12 @@ void	do_eat(t_philo *philo)
 	timestamp = get_time(MILLISECOND);
 	// lock both forks for time_to_eat
 	mutex_handler(&philo->left_fork->fork, LOCK);
-	printf("%ld took left fork %ld\n", philo->id, philo->left_fork->fork_id);
 	mutex_handler(&philo->right_fork->fork, LOCK);
-	printf("%ld took right fork %ld\n", philo->id, philo->right_fork->fork_id);
-	philo->meals += 1;
+	set_long(&philo->table->table_mutex, &philo->meals, philo->meals += 1);
 	philo->last_meal_time = timestamp;
 	printf("%ld %ld is eating\n", timestamp, philo->id);
 	mutex_handler(&philo->left_fork->fork, UNLOCK);
-	printf("%ld put left fork %ld\n", philo->id, philo->left_fork->fork_id);
 	mutex_handler(&philo->right_fork->fork, UNLOCK);
-	printf("%ld put right fork %ld\n", philo->id, philo->right_fork->fork_id);
 }
 
 void	do_sleep(t_philo *philo)

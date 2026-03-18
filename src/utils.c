@@ -20,13 +20,18 @@
 
 void	get_end_simulation(t_table *table)
 {
-	int	i;
+	int		i;
+	bool	last_meal_time;
+	bool	time_to_die;
 
+	time_to_die = get_long(&table->table_mutex, &table->philos[0].time_to_die);
+	last_meal_time = get_long(&table->table_mutex,
+			&table->philos[0].last_meal_time);
 	i = -1;
 	while (++i < table->nbr_philo)
 	{
-		if (table->philos[i].last_meal_time >= table->philos[i].time_to_die)
-			set_bool(&table->table_mutex, &table->end_simulation, true);
+		if (last_meal_time >= time_to_die)
+			set_bool(&table->write_mutex, &table->end_simulation, true);
 		if (table->philos[i].last_meal_time >= table->time_start_sim)
 			set_bool(&table->table_mutex, &table->end_simulation, true);
 		else if (table->philos[i].meals >= table->max_nbr_meals)

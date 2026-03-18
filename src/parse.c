@@ -25,7 +25,7 @@ int	input_parser(t_table *table, char **argv)
 	if (argv[5])
 	{
 		table->max_nbr_meals = ft_atol(argv[5]);
-		if (table->max_nbr_meals < 0)
+		if (table->max_nbr_meals <= 0)
 			return (1);
 	}
 	else
