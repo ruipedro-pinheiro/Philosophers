@@ -21,8 +21,8 @@
 void	get_end_simulation(t_table *table)
 {
 	int		i;
-	bool	last_meal_time;
-	bool	time_to_die;
+	long	last_meal_time;
+	long	time_to_die;
 
 	time_to_die = get_long(&table->table_mutex, &table->philos[0].time_to_die);
 	last_meal_time = get_long(&table->table_mutex,
@@ -30,12 +30,19 @@ void	get_end_simulation(t_table *table)
 	i = -1;
 	while (++i < table->nbr_philo)
 	{
-		if (last_meal_time >= time_to_die)
-			set_bool(&table->write_mutex, &table->end_simulation, true);
-		if (table->philos[i].last_meal_time >= table->time_start_sim)
+		if (get_time(MILLISECOND) - last_meal_time >= time_to_die)
+		{
+			printf(" last meal time: %ld | time to die: %ld\n", last_meal_time, time_to_die);
+			printf("Philo %ld should die because he havent eat\n", table->philos->id);
 			set_bool(&table->table_mutex, &table->end_simulation, true);
-		else if (table->philos[i].meals >= table->max_nbr_meals)
+			return ;
+		}
+		else if (table->philos[i].meals > table->max_nbr_meals && table->max_nbr_meals > 0)
+		{
+			printf("Philo %ld had %ld out of max %ld meals \n", table->philos->id, table->philos->meals, table->max_nbr_meals);
 			set_bool(&table->table_mutex, &table->end_simulation, true);
+			return ;
+		}
 	}
 }
 
@@ -62,9 +69,9 @@ long	get_time(t_timecode timecode)
 	if (gettimeofday(&tv, NULL) == -1)
 		exit_error("Could not get time of day");
 	if (SECOND == timecode)
-		return (tv.tv_sec + (tv.tv_usec / 1e6));
+		return (tv.tv_sec * 1e3 + (tv.tv_usec / 1e6));
 	else if (MILLISECOND == timecode)
-		return (tv.tv_sec + (tv.tv_usec / 1e3));
+		return (tv.tv_sec * 1e3 + (tv.tv_usec / 1e3));
 	else if (MICROSECOND == timecode)
 		return (tv.tv_sec * 1e6 + tv.tv_usec);
 	else

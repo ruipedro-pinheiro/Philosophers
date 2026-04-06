@@ -13,6 +13,7 @@
 #ifndef PHILO_H
 # define PHILO_H
 
+#define _DEFAULT_SOURCE
 # include "../libft/libft.h"
 # include <bits/pthreadtypes.h>
 # include <errno.h>
@@ -72,7 +73,6 @@ typedef struct s_table
 	t_philo				*philos;
 	t_fork				*forks;
 	t_mtx				table_mutex;
-	t_mtx				write_mutex;
 	long				nbr_philo;
 	long				time_to_die;
 	long				time_to_eat;
@@ -110,6 +110,7 @@ long					get_long(t_mtx *mutex, long *value);
 bool					simulation_finished(t_table *table);
 long					get_time(t_timecode timecode);
 void					start_dinner(t_table *table);
-void					get_end_simulation(t_table *table);
+void                    get_end_simulation(t_table *table);
+
 
 #endif

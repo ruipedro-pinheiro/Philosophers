@@ -32,6 +32,7 @@ int	main(int argc, char **argv)
 	if (data_init(&table) != 0)
 		return (1);
 	start_dinner(&table);
+	get_end_simulation(&table);
 	free(table.philos);
 	free(table.forks);
 	return (0);
