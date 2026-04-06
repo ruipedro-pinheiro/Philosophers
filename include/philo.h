@@ -73,6 +73,7 @@ typedef struct s_table
 	t_philo				*philos;
 	t_fork				*forks;
 	t_mtx				table_mutex;
+    t_mtx               simulation_mutex;
 	long				nbr_philo;
 	long				time_to_die;
 	long				time_to_eat;
@@ -111,6 +112,9 @@ bool					simulation_finished(t_table *table);
 long					get_time(t_timecode timecode);
 void					start_dinner(t_table *table);
 void                    get_end_simulation(t_table *table);
+bool                    are_philos_full(t_table *table);
+
+
 
 
 #endif

@@ -28,21 +28,16 @@ void	get_end_simulation(t_table *table)
 	last_meal_time = get_long(&table->table_mutex,
 			&table->philos[0].last_meal_time);
 	i = -1;
-	while (++i < table->nbr_philo)
+	while (++i < table->nbr_philo && table->end_simulation == false)
 	{
 		if (get_time(MILLISECOND) - last_meal_time >= time_to_die)
 		{
-			printf(" last meal time: %ld | time to die: %ld\n", last_meal_time, time_to_die);
 			printf("Philo %ld should die because he havent eat\n", table->philos->id);
 			set_bool(&table->table_mutex, &table->end_simulation, true);
 			return ;
 		}
-		else if (table->philos[i].meals > table->max_nbr_meals && table->max_nbr_meals > 0)
-		{
-			printf("Philo %ld had %ld out of max %ld meals \n", table->philos->id, table->philos->meals, table->max_nbr_meals);
-			set_bool(&table->table_mutex, &table->end_simulation, true);
-			return ;
-		}
+		if (table->philos[i].meals >= table->max_nbr_meals)
+			set_bool(&table->simulation_mutex, &table->end_simulation, true);
 	}
 }
 
