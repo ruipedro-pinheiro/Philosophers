@@ -36,8 +36,7 @@ void	get_end_simulation(t_table *table)
 			set_bool(&table->table_mutex, &table->end_simulation, true);
 			return ;
 		}
-		if (table->philos[i].meals >= table->max_nbr_meals)
-			set_bool(&table->simulation_mutex, &table->end_simulation, true);
+		are_philos_full(table);
 	}
 }
 

@@ -25,11 +25,9 @@ void	do_eat(t_philo *philo)
 	mutex_handler(&philo->right_fork->fork, LOCK);
 	set_long(&philo->table->table_mutex, &philo->meals, philo->meals + 1);
 	set_long(&philo->table->table_mutex, &philo->last_meal_time, timestamp);
-	if (are_philos_full(philo->table))
-		return ;
 	get_end_simulation(philo->table);
 
-	printf("%ld %ld is eating\n", timestamp, philo->id);
+	printf("%ld %ld	is eating\n", timestamp, philo->id);
 	mutex_handler(&philo->left_fork->fork, UNLOCK);
 	mutex_handler(&philo->right_fork->fork, UNLOCK);
 	if (simulation_finished(philo->table))
@@ -70,6 +68,7 @@ void	*simulation(void *data)
 		do_eat(philo);
 		do_sleep(philo);
 		do_think(philo);
+		sleep(1);
 	}
 	return (NULL);
 }
