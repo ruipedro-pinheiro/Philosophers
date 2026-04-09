@@ -1,34 +1,52 @@
 *This project has been created as part of the 42 curriculum by rpinheir*
 
-# Description 
-The project **Philosophers** or more well known outside of 42 as the ***dining philosophers problem***, is a project were the main notions to learn are mutexes, multi-threading and managing both at the same time. 
+# Philosophers
 
-The project is theorically "simple", as one philosopher is one thread and each philosopher fork is a mutex, and the challenge is to provide each thread it's own mutex, so, each philosopher has his own fork but needs also another fork, which will be the nearbiest. They will have to eat -> sleep -> think, and if they dont eat for some given time, they will die.
+The **Dining Philosophers Problem** is a classic concurrency challenge. This project teaches thread management, mutex synchronization, and deadlock prevention in C.
 
-# Instructions
-#### Build the code with:
-```bash
-make
-```
-<br>
-And specify timestamps, while the [5] being optional.<br>
-15 = number of philosophers and forks (1 fork for 1 philosopher)<br>
-800 = Time in millseconds specifying deadlines for philosophers need to start to eat or they will die.<br>
-200 = Time philosophers will be only eating, needing then to hold 2 forks in this delay.<br>
-200 = Time philosophers will be spending time sleeping.<br>
-<br>
-/// OPTIONAL \\\ <br>
-5 =   If all philosophers have eaten at least 5 times, the simulation stops<br>
+Each philosopher is a thread. Each fork is a mutex. Philosophers must pick up two forks to eat, then sleep, then think. If a philosopher doesn't eat within a given time, they die. The simulation stops when a philosopher dies or when all have eaten enough.
+
+## Instructions
+
+Build from the `philo/` directory:
 
 ```bash
-./philo 5 800 200 200 5
+cd philo && make
 ```
 
-# Resources
+Run with the following arguments:
 
-Here are some information links that i used to start the project, i inicially allways start from medium or youtube videos for the basic notions like what are threads, differences from threads and processes and also what is a mutex and how to use them.
+```
+./philo number_of_philosophers time_to_die time_to_eat time_to_sleep [max_meals]
+```
 
- 1. [CodeVault introduction playlist](https://www.youtube.com/watch?v=d9s_d28yJq0&list=PLfqABt5AS4FmuQf70psXrsMLEDQXNkLq2)
- 2. [Oceano mutex and threadding introduction](https://youtu.be/mvZKu0DfFLQ)
+| Argument | Description |
+|----------|-------------|
+| `number_of_philosophers` | Number of philosophers and forks |
+| `time_to_die` | Time in ms before a philosopher dies without eating |
+| `time_to_eat` | Time in ms a philosopher spends eating (holding 2 forks) |
+| `time_to_sleep` | Time in ms a philosopher spends sleeping |
+| `max_meals` | *(optional)* Simulation stops when all philosophers have eaten this many times |
 
+### Examples
 
+```bash
+./philo 5 800 200 200        # No one should die
+./philo 1 800 200 200        # One philosopher, dies at 800ms
+./philo 4 310 200 100        # A philosopher dies at 310ms
+./philo 5 800 200 200 7      # Stops when everyone has eaten 7 times
+```
+
+## Resources
+
+1. [CodeVault — Threading & Mutex playlist](https://www.youtube.com/watch?v=d9s_d28yJq0&list=PLfqABt5AS4FmuQf70psXrsMLEDQXNkLq2)
+2. [Oceano — Mutex and threading introduction](https://youtu.be/mvZKu0DfFLQ)
+
+### AI Usage
+
+[Claude Code](https://claude.ai) was used as a debugging and review assistant throughout the project. Specifically:
+- Identifying data races and mutex inconsistencies
+- Adding doxygen documentation comments
+- README formatting and structure
+
+All code was written by me.
