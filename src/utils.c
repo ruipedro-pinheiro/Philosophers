@@ -1,43 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rpinheir <rpinhier@student.42Lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 12:07:08 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/03/05 13:25:59 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/04/09 11:53:53 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
-#include <asm-generic/errno-base.h>
-#include <asm-generic/errno.h>
-#include <fcntl.h>
-#include <pthread.h>
-#include <stdlib.h>
-#include <sys/time.h>
 
-void	get_end_simulation(t_table *table)
+void	safe_print(t_philo *philo, char *msg)
 {
-	int		i;
-	long	last_meal_time;
-	long	time_to_die;
+	long	timestamp;
 
-	time_to_die = get_long(&table->table_mutex, &table->philos[0].time_to_die);
-	last_meal_time = get_long(&table->table_mutex,
-			&table->philos[0].last_meal_time);
-	i = -1;
-	while (++i < table->nbr_philo && table->end_simulation == false)
+	timestamp = (get_time(MICROSECOND) - philo->table->time_start_sim) / 1000;
+	if (simulation_finished(philo->table))
 	{
-		if (get_time(MILLISECOND) - last_meal_time >= time_to_die)
-		{
-			printf("Philo %ld should die because he havent eat\n", table->philos->id);
-			set_bool(&table->table_mutex, &table->end_simulation, true);
-			return ;
-		}
-		are_philos_full(table);
+		return ;
 	}
+	mutex_handler(&philo->table->table_mutex, LOCK);
+	printf("%ld %ld %s\n", timestamp, philo->id, msg);
+	mutex_handler(&philo->table->table_mutex, UNLOCK);
 }
 
 void	*safe_malloc(size_t bytes)

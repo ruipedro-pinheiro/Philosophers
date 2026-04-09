@@ -6,12 +6,11 @@
 /*   By: rpinheir <rpinheir@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 13:37:38 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/03/05 13:26:19 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/04/09 12:05:35 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
-#include <stdlib.h>
 
 int	main(int argc, char **argv)
 {
@@ -32,7 +31,6 @@ int	main(int argc, char **argv)
 	if (data_init(&table) != 0)
 		return (1);
 	start_dinner(&table);
-	get_end_simulation(&table);
 	free(table.philos);
 	free(table.forks);
 	return (0);

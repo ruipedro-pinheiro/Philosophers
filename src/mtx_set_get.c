@@ -6,7 +6,7 @@
 /*   By: rpinheir <rpinheir@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/04 15:34:24 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/03/04 15:43:30 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/04/09 11:14:47 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,5 @@ long	get_long(t_mtx *mutex, long *value)
 
 bool	simulation_finished(t_table *table)
 {
-	return (get_bool(&table->table_mutex, &table->end_simulation));
+	return (get_bool(&table->simulation_mutex, &table->end_simulation));
 }

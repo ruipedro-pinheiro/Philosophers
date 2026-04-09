@@ -3,13 +3,10 @@ NAME = philo
 SRCDIR = src
 OBJDIR = obj
 INCDIR = include
-LIBFT_DIR = libft
-LIBFT = $(LIBFT_DIR)/libft.a
-
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -I$(INCDIR) -I$(LIBFT_DIR)
+CFLAGS = -Wall -Wextra -Werror -I$(INCDIR)
 
-SRC = main.c parse.c utils.c data_init.c safe_functions.c mtx_set_get.c simulation.c sync_utils.c
+SRC = main.c parse.c utils.c data_init.c safe_functions.c mtx_set_get.c simulation.c sync_utils.c monitoring.c
 OBJ = $(addprefix $(OBJDIR)/, $(SRC:.c=.o))
 
 ################################################################################
@@ -37,17 +34,14 @@ endef
 #                                   RULES                                      #
 ################################################################################
 
-all: $(LIBFT) $(NAME)
+all: $(NAME)
 	@if [ $$(cat $(CNT)) -gt 0 ]; then printf "\n"; fi
 	@printf " $(C)✅ [$(NAME)] $(B)Build complete$(X)\n"
 
 
 
-$(NAME): $(OBJ) $(LIBFT)
-	@$(CC) $(CFLAGS) -L$(LIBFT_DIR) $(OBJ) $(LIBFT) -o $(NAME)
-
-$(LIBFT):
-	@$(MAKE) --silent -C $(LIBFT_DIR)
+$(NAME): $(OBJ)
+	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
 $(OBJDIR):
 	@mkdir -p $(OBJDIR)
@@ -61,12 +55,10 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
 
 clean:
 	@printf "$(R)🗑️  [$(NAME)] Cleaned$(X)\n"
-	@rm -rf $(OBJDIR) $(OBJDIR_B)
-	@$(MAKE) --silent -C $(LIBFT_DIR) clean
+	@rm -rf $(OBJDIR)
 
 fclean: clean
-	@rm -f $(NAME) .bonus
-	@$(MAKE) --silent -C $(LIBFT_DIR) fclean
+	@rm -f $(NAME)
 
 re: fclean all
 
