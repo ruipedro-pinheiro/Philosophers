@@ -12,6 +12,15 @@
 
 #include "../include/philo.h"
 
+/*
+** @brief Assign left and right forks to a philosopher
+** @param philo Pointer to the philosopher to configure
+** @param forks Array of all forks on the table
+** @param position Index of this philosopher (0-based)
+** @note Even-numbered philos swap fork order to prevent deadlock
+** @note This ensures no two adjacent philos lock forks in the same order
+** @see data_init() which calls philo_init() which calls this
+*/
 static void	assign_forks(t_philo *philo, t_fork *forks, int position)
 {
 	int	nbr_philo;
@@ -26,6 +35,13 @@ static void	assign_forks(t_philo *philo, t_fork *forks, int position)
 	}
 }
 
+/*
+** @brief Initialize all philosopher structs with default values and forks
+** @param table Pointer to the main table structure
+** @note Sets id (1-based), meals to 0, last_meal_time to 0
+** @note last_meal_time is updated to time_start_sim in start_dinner()
+** @see assign_forks() for fork assignment per philosopher
+*/
 static void	philo_init(t_table *table)
 {
 	int		i;
@@ -45,6 +61,15 @@ static void	philo_init(t_table *table)
 	}
 }
 
+/*
+** @brief Allocate memory, init all mutexes, and configure philosophers
+** @param table Pointer to the table structure (already populated by parser)
+** @return int Always returns 0
+** @note Inits table_mutex, simulation_mutex, and one fork mutex per philo
+** @warning safe_malloc does not exit on failure — potential NULL dereference
+** @see cleanup() for the corresponding deallocation and mutex destroy
+** @see philo_init() for philosopher struct initialization
+*/
 int	data_init(t_table *table)
 {
 	int	i;

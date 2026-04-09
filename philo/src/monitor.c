@@ -12,6 +12,15 @@
 
 #include "../include/philo.h"
 
+/*
+** @brief Check if all philosophers have eaten max_nbr_meals times
+** @param table Pointer to the main table structure
+** @return true if all philos reached max_nbr_meals, false otherwise
+** @note Returns false immediately if max_nbr_meals is -1 (not specified)
+** @note Sets end_simulation to true if all philos are full
+** @warning Reads philo meals under simulation_mutex to avoid data races
+** @see get_end_simulation() which calls this function each check cycle
+*/
 bool	are_philos_full(t_table *table)
 {
 	long	i;
@@ -40,6 +49,16 @@ bool	are_philos_full(t_table *table)
 	return (false);
 }
 
+/*
+** @brief Check each philosopher for death by starvation or meal completion
+** @param table Pointer to the main table structure
+** @note Compares current time - last_meal_time against time_to_die
+** @note Death message is printed inside a table_mutex lock to prevent overlap
+** @note end_simulation is set BEFORE the died printf to block safe_print
+** @warning Must not be called from a philosopher thread (monitor only)
+** @see are_philos_full() for the meal completion check
+** @see safe_print() which checks simulation_finished before printing
+*/
 void	get_end_simulation(t_table *table)
 {
 	int		i;
@@ -67,6 +86,15 @@ void	get_end_simulation(t_table *table)
 	}
 }
 
+/*
+** @brief Monitor thread routine: polls for death or meal completion
+** @param data Void pointer to the t_table struct (cast internally)
+** @return void* Always returns NULL
+** @note Checks every 500 microseconds for death detection within 10ms
+** @note Runs independently from philosopher threads
+** @see get_end_simulation() for the actual death/meal check logic
+** @see start_dinner() where this function is passed to pthread_create
+*/
 void	*monitor(void *data)
 {
 	t_table	*table;

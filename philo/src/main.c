@@ -12,6 +12,14 @@
 
 #include "../include/philo.h"
 
+/*
+** @brief Destroy all mutexes and free all heap-allocated memory
+** @param table Pointer to the main table structure
+** @note Must be called after start_dinner returns (all threads joined)
+** @note Destroys fork mutexes, table_mutex, simulation_mutex in order
+** @warning Calling this while threads are still running is undefined behavior
+** @see data_init() for the corresponding initialization
+*/
 void	cleanup(t_table *table)
 {
 	int	i;
@@ -27,6 +35,16 @@ void	cleanup(t_table *table)
 	free(table->philos);
 }
 
+/*
+** @brief Create all philosopher threads, the monitor thread, and join them
+** @param table Pointer to the main table structure
+** @note Threads are held by wait_all_threads until all_threads_ready is set
+** @note time_start_sim and each philo's last_meal_time are set before release
+** @warning Blocks until all threads have finished (simulation ended)
+** @see simulation() for the philosopher thread routine
+** @see monitor() for the death/meal monitoring thread
+** @see cleanup() to free resources after this returns
+*/
 void	start_dinner(t_table *table)
 {
 	int			i;
@@ -51,6 +69,15 @@ void	start_dinner(t_table *table)
 	thread_handler(&monitor_thread, NULL, NULL, JOIN);
 }
 
+/*
+** @brief Entry point — parse args, init data, run simulation, cleanup
+** @param argc Argument count (expected 5 or 6)
+** @param argv Arguments: nbr_philo time_to_die time_to_eat time_to_sleep [meals]
+** @return int 0 on success, 1 on invalid arguments or init failure
+** @note Times are given in ms (input) and stored in us internally
+** @see input_parser() for argument validation
+** @see data_init() for memory allocation and mutex initialization
+*/
 int	main(int argc, char **argv)
 {
 	t_table	table;

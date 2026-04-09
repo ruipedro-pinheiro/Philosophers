@@ -54,3 +54,4 @@ dkms.conf
 # debug information files
 *.dwo
 philo/philo
+philo/compile_commands.json

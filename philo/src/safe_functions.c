@@ -12,6 +12,13 @@
 
 #include "../include/philo.h"
 
+/*
+** @brief Handle pthread_create/pthread_join error codes
+** @param status Return value from the pthread function
+** @param opcode The operation that was attempted (CREATE or JOIN)
+** @note Does nothing if status is 0 (success)
+** @see thread_handler() which calls this after each pthread operation
+*/
 void	thread_error_handler(int status, t_opcode opcode)
 {
 	if (0 == status)
@@ -28,6 +35,15 @@ void	thread_error_handler(int status, t_opcode opcode)
 		exit_error("Deadlock was found");
 }
 
+/*
+** @brief Wrapper for pthread_create and pthread_join with error handling
+** @param thread Pointer to the pthread_t variable
+** @param foo Thread start routine (NULL for JOIN)
+** @param data Argument passed to the thread routine (NULL for JOIN)
+** @param opcode CREATE or JOIN
+** @warning Only CREATE and JOIN are supported — other opcodes print an error
+** @see thread_error_handler() for error code interpretation
+*/
 void	thread_handler(pthread_t *thread, void *(*foo)(void *), void *data,
 		t_opcode opcode)
 {
@@ -42,6 +58,13 @@ void	thread_handler(pthread_t *thread, void *(*foo)(void *), void *data,
 	}
 }
 
+/*
+** @brief Handle pthread_mutex error codes for all mutex operations
+** @param status Return value from the pthread_mutex function
+** @param opcode The operation attempted (LOCK, UNLOCK, INIT, or DESTROY)
+** @note Does nothing if status is 0 (success)
+** @see mutex_handler() which calls this after each mutex operation
+*/
 void	mutex_error_handler(int status, t_opcode opcode)
 {
 	if (status == 0)
@@ -61,6 +84,14 @@ void	mutex_error_handler(int status, t_opcode opcode)
 		exit_error("Mutex is currently locked");
 }
 
+/*
+** @brief Wrapper for all pthread_mutex operations with error handling
+** @param mutex Pointer to the mutex to operate on
+** @param opcode LOCK, UNLOCK, INIT, or DESTROY
+** @warning Prints error and continues on failure — does not exit
+** @see mutex_error_handler() for error code interpretation
+** @see data_init() and cleanup() for INIT/DESTROY usage
+*/
 void	mutex_handler(t_mtx *mutex, t_opcode opcode)
 {
 	if (LOCK == opcode)

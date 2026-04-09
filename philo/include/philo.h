@@ -89,6 +89,7 @@ int						data_init(t_table *table);
 
 /* routine.c */
 void					*simulation(void *data);
+void					smart_sleep(long time, t_table *table);
 
 /* monitor.c */
 void					*monitor(void *data);

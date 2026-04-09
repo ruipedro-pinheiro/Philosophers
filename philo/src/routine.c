@@ -12,6 +12,35 @@
 
 #include "../include/philo.h"
 
+/*
+ *
+ *
+ *
+ *
+ *
+ */
+void	smart_sleep(long time, t_table *table)
+{
+	long	start;
+
+	start = get_time(MICROSECOND);
+	while (!simulation_finished(table)
+		&& (get_time(MICROSECOND) - start) < time)
+	{
+		usleep(50);
+	}
+}
+
+/*
+** @brief Philosopher picks up forks, eats, then releases forks
+** @param philo Pointer to the philosopher performing the action
+** @note For 1 philo: locks only left fork and waits for death (only 1 fork)
+** @note Even philos pick forks in reverse order to prevent deadlock
+** @note Updates meals count and last_meal_time under simulation_mutex
+** @warning Holds both fork mutexes during the entire eat duration (usleep)
+** @see assign_forks() for the fork ordering strategy
+** @see do_sleep() for the next action after eating
+*/
 void	do_eat(t_philo *philo)
 {
 	long	meals;
@@ -36,28 +65,56 @@ void	do_eat(t_philo *philo)
 	set_long(&philo->table->simulation_mutex, &philo->last_meal_time,
 		get_time(MICROSECOND));
 	safe_print(philo, "is eating");
-	usleep(philo->table->time_to_eat);
+	smart_sleep(philo->table->time_to_eat, philo->table);
 	mutex_handler(&philo->left_fork->fork, UNLOCK);
 	mutex_handler(&philo->right_fork->fork, UNLOCK);
 }
 
+/*
+** @brief Philosopher sleeps for time_to_sleep microseconds
+** @param philo Pointer to the philosopher performing the action
+** @note Checks simulation_finished before sleeping to avoid unnecessary delay
+** @see do_think() for the next action after sleeping
+*/
 void	do_sleep(t_philo *philo)
 {
 	if (simulation_finished(philo->table))
 		return ;
-	usleep(philo->table->time_to_sleep);
 	safe_print(philo, "is sleeping");
+	smart_sleep(philo->table->time_to_sleep, philo->table);
 }
 
+/*
+** @brief Philosopher thinks, with optional delay for scheduling fairness
+** @param philo Pointer to the philosopher performing the action
+** @note If time_to_eat > time_to_sleep, adds a usleep to balance scheduling
+** @note This prevents starvation with odd numbers of philosophers
+** @see do_eat() for the next action after thinking
+*/
 void	do_think(t_philo *philo)
 {
 	if (simulation_finished(philo->table))
 		return ;
 	safe_print(philo, "is thinking");
-	if (philo->table->time_to_eat > philo->table->time_to_sleep)
-		usleep(philo->table->time_to_eat - philo->table->time_to_sleep);
+	if (philo->table->nbr_philo % 2 != 0)
+	{
+		if (philo->table->time_to_eat > philo->table->time_to_sleep)
+			smart_sleep(philo->table->time_to_eat
+				- philo->table->time_to_sleep, philo->table);
+		else
+			smart_sleep(500, philo->table);
+	}
 }
 
+/*
+** @brief Main philosopher thread routine: eat -> sleep -> think loop
+** @param data Void pointer to the t_philo struct (cast internally)
+** @return void* Always returns NULL
+** @note Waits for all_threads_ready before starting the loop
+** @note Loops until simulation_finished is set by the monitor
+** @see start_dinner() where this function is passed to pthread_create
+** @see monitor() which sets end_simulation to stop this loop
+*/
 void	*simulation(void *data)
 {
 	t_philo	*philo;
