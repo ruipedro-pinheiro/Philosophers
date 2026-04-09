@@ -17,11 +17,12 @@ void	safe_print(t_philo *philo, char *msg)
 	long	timestamp;
 
 	timestamp = (get_time(MICROSECOND) - philo->table->time_start_sim) / 1000;
+	mutex_handler(&philo->table->table_mutex, LOCK);
 	if (simulation_finished(philo->table))
 	{
+		mutex_handler(&philo->table->table_mutex, UNLOCK);
 		return ;
 	}
-	mutex_handler(&philo->table->table_mutex, LOCK);
 	printf("%ld %ld %s\n", timestamp, philo->id, msg);
 	mutex_handler(&philo->table->table_mutex, UNLOCK);
 }
@@ -57,4 +58,10 @@ long	get_time(t_timecode timecode)
 	else
 		exit_error("Wrong timecode");
 	return (0);
+}
+
+void	wait_all_threads(t_table *table)
+{
+	while (!get_bool(&table->table_mutex, &table->all_threads_ready))
+		;
 }

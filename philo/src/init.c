@@ -57,10 +57,7 @@ int	data_init(t_table *table)
 	mutex_handler(&table->table_mutex, INIT);
 	mutex_handler(&table->simulation_mutex, INIT);
 	while (++i < table->nbr_philo)
-	{
 		mutex_handler(&table->forks[i].fork, INIT);
-		table->forks[i].fork_id = i + 1;
-	}
 	philo_init(table);
 	return (0);
 }

@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "../include/philo.h"
-#include <limits.h>
 
 int	input_parser(t_table *table, char **argv)
 {
@@ -19,8 +18,8 @@ int	input_parser(t_table *table, char **argv)
 	table->time_to_die = ft_atol(argv[2]) * 1e3;
 	table->time_to_eat = ft_atol(argv[3]) * 1e3;
 	table->time_to_sleep = ft_atol(argv[4]) * 1e3;
-	if (table->nbr_philo < 0 || table->time_to_die < 0 || table->time_to_eat < 0
-		|| table->time_to_sleep < 0)
+	if (table->nbr_philo <= 0 || table->time_to_die < 0
+		|| table->time_to_eat < 0 || table->time_to_sleep < 0)
 		return (1);
 	if (argv[5])
 	{

@@ -6,7 +6,7 @@ INCDIR = include
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -I$(INCDIR)
 
-SRC = main.c parse.c utils.c data_init.c safe_functions.c mtx_set_get.c simulation.c sync_utils.c monitoring.c
+SRC = main.c parse.c utils.c init.c safe_functions.c mtx_set_get.c routine.c monitor.c
 OBJ = $(addprefix $(OBJDIR)/, $(SRC:.c=.o))
 
 ################################################################################
@@ -45,9 +45,6 @@ $(NAME): $(OBJ)
 
 $(OBJDIR):
 	@mkdir -p $(OBJDIR)
-
-$(OBJDIR_B):
-	@mkdir -p $(OBJDIR_B)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
 	@$(CC) $(CFLAGS) -c $< -o $@

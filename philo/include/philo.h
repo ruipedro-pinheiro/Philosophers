@@ -6,26 +6,25 @@
 /*   By: rpinheir <rpinheir@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 13:38:56 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/04/09 11:54:06 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/04/09 15:10:00 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
-
+# define _DEFAULT_SOURCE
 # include <errno.h>
 # include <limits.h>
 # include <pthread.h>
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
-# include <string.h>
 # include <sys/time.h>
 # include <unistd.h>
 
 typedef pthread_mutex_t	t_mtx;
 
-typedef enum opcode
+typedef enum e_opcode
 {
 	LOCK,
 	UNLOCK,
@@ -33,7 +32,6 @@ typedef enum opcode
 	DESTROY,
 	CREATE,
 	JOIN,
-	DETACH,
 }						t_opcode;
 
 typedef enum e_timecode
@@ -46,7 +44,6 @@ typedef enum e_timecode
 typedef struct s_fork
 {
 	t_mtx				fork;
-	long				fork_id;
 }						t_fork;
 
 typedef struct s_philo
@@ -78,28 +75,45 @@ typedef struct s_table
 	bool				end_simulation;
 }						t_table;
 
+/* main.c */
+void					start_dinner(t_table *table);
+void					cleanup(t_table *table);
+
+/* parse.c */
 long					ft_atol(const char *str);
-void					*monitor(void *data);
 bool					is_digit(char c);
-int						exit_error(const char *msg);
 int						input_parser(t_table *table, char **argv);
+
+/* init.c */
 int						data_init(t_table *table);
-void					*safe_malloc(size_t bytes);
+
+/* routine.c */
+void					*simulation(void *data);
+
+/* monitor.c */
+void					*monitor(void *data);
+void					get_end_simulation(t_table *table);
+bool					are_philos_full(t_table *table);
+
+/* safe_functions.c */
 void					thread_error_handler(int status, t_opcode opcode);
 void					thread_handler(pthread_t *thread, void *(*foo)(void *),
 							void *data, t_opcode opcode);
 void					mutex_error_handler(int status, t_opcode opcode);
 void					mutex_handler(t_mtx *mutex, t_opcode opcode);
-void					wait_all_threads(t_table *table);
+
+/* mtx_set_get.c */
 void					set_bool(t_mtx *mutex, bool *dest, bool value);
 bool					get_bool(t_mtx *mutex, bool *value);
 void					set_long(t_mtx *mutex, long *dest, long value);
 long					get_long(t_mtx *mutex, long *value);
 bool					simulation_finished(t_table *table);
-long					get_time(t_timecode timecode);
-void					start_dinner(t_table *table);
-void					get_end_simulation(t_table *table);
-bool					are_philos_full(t_table *table);
+
+/* utils.c */
 void					safe_print(t_philo *philo, char *msg);
+void					*safe_malloc(size_t bytes);
+int						exit_error(const char *msg);
+long					get_time(t_timecode timecode);
+void					wait_all_threads(t_table *table);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: rpinheir <rpinheir@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 10:45:23 by rpinheir          #+#    #+#             */
-/*   Updated: 2026/04/09 14:41:56 by rpinheir         ###   ########.ch       */
+/*   Updated: 2026/04/09 15:25:14 by rpinheir         ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ bool	are_philos_full(t_table *table)
 {
 	long	i;
 	long	nbr_full_philo;
+	long	meals;
 
 	i = -1;
 	nbr_full_philo = 0;
@@ -23,9 +24,11 @@ bool	are_philos_full(t_table *table)
 		return (false);
 	while (++i < table->nbr_philo)
 	{
-		if (table->philos[i].meals >= table->max_nbr_meals)
+		meals = get_long(&table->simulation_mutex, &table->philos[i].meals);
+		if (meals >= table->max_nbr_meals)
 		{
-			table->philos[i].finished_eating = true;
+			set_bool(&table->simulation_mutex,
+				&table->philos[i].finished_eating, true);
 			nbr_full_philo++;
 		}
 	}
@@ -43,18 +46,21 @@ void	get_end_simulation(t_table *table)
 	long	last_meal_time;
 	long	time_to_die;
 
-	time_to_die = get_long(&table->table_mutex, &table->philos[0].time_to_die);
+	time_to_die = get_long(&table->simulation_mutex,
+			&table->philos[0].time_to_die);
 	i = -1;
 	while (++i < table->nbr_philo && !simulation_finished(table))
 	{
-		last_meal_time = get_long(&table->table_mutex,
+		last_meal_time = get_long(&table->simulation_mutex,
 				&table->philos[i].last_meal_time);
 		if (get_time(MICROSECOND) - last_meal_time >= time_to_die)
 		{
+			mutex_handler(&table->table_mutex, LOCK);
+			set_bool(&table->simulation_mutex, &table->end_simulation, true);
 			printf("%ld %ld died\n",
 				(get_time(MICROSECOND) - table->time_start_sim) / 1000,
 				table->philos[i].id);
-			set_bool(&table->simulation_mutex, &table->end_simulation, true);
+			mutex_handler(&table->table_mutex, UNLOCK);
 			return ;
 		}
 		are_philos_full(table);

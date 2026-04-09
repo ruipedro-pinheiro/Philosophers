@@ -12,6 +12,45 @@
 
 #include "../include/philo.h"
 
+void	cleanup(t_table *table)
+{
+	int	i;
+
+	i = -1;
+	while (++i < table->nbr_philo)
+	{
+		mutex_handler(&table->forks[i].fork, DESTROY);
+	}
+	mutex_handler(&table->table_mutex, DESTROY);
+	mutex_handler(&table->simulation_mutex, DESTROY);
+	free(table->forks);
+	free(table->philos);
+}
+
+void	start_dinner(t_table *table)
+{
+	int			i;
+	pthread_t	monitor_thread;
+
+	i = -1;
+	while (++i < table->nbr_philo)
+		thread_handler(&table->philos[i].thread_id, simulation,
+			&table->philos[i], CREATE);
+	table->time_start_sim = get_time(MICROSECOND);
+	i = -1;
+	while (++i < table->nbr_philo)
+	{
+		set_long(&table->simulation_mutex,
+			&table->philos[i].last_meal_time, table->time_start_sim);
+	}
+	thread_handler(&monitor_thread, monitor, table, CREATE);
+	set_bool(&table->table_mutex, &table->all_threads_ready, true);
+	i = -1;
+	while (++i < table->nbr_philo)
+		thread_handler(&table->philos[i].thread_id, NULL, NULL, JOIN);
+	thread_handler(&monitor_thread, NULL, NULL, JOIN);
+}
+
 int	main(int argc, char **argv)
 {
 	t_table	table;
@@ -31,7 +70,6 @@ int	main(int argc, char **argv)
 	if (data_init(&table) != 0)
 		return (1);
 	start_dinner(&table);
-	free(table.philos);
-	free(table.forks);
+	cleanup(&table);
 	return (0);
 }
