@@ -49,7 +49,7 @@ void	*safe_malloc(size_t bytes)
 
 	ret = malloc(bytes);
 	if (!ret)
-		exit_error("Malloc didn't work");
+		exit_error("Malloc didn't work"); // NOT SAFE ! TODO
 	return (ret);
 }
 
