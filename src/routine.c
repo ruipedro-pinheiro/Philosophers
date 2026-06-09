@@ -121,6 +121,8 @@ void	*simulation(void *data)
 
 	philo = (t_philo *)data;
 	wait_all_threads(philo->table);
+	if (philo->id % 2 == 0)
+		smart_sleep(philo->table->time_to_eat / 2, philo->table);
 	while (!simulation_finished(philo->table))
 	{
 		do_eat(philo);

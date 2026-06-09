@@ -79,6 +79,12 @@ int	data_init(t_table *table)
 	table->all_threads_ready = false;
 	table->philos = safe_malloc(sizeof(t_philo) * table->nbr_philo);
 	table->forks = safe_malloc(sizeof(t_fork) * table->nbr_philo);
+	if (!table->philos || !table->forks)
+	{
+		free(table->philos);
+		free(table->forks);
+		return (exit_error("Malloc didn't work"));
+	}
 	mutex_handler(&table->table_mutex, INIT);
 	mutex_handler(&table->simulation_mutex, INIT);
 	while (++i < table->nbr_philo)

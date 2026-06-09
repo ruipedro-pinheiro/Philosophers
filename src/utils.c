@@ -49,7 +49,7 @@ void	*safe_malloc(size_t bytes)
 
 	ret = malloc(bytes);
 	if (!ret)
-		exit_error("Malloc didn't work"); // NOT SAFE ! TODO
+		exit_error("Malloc didn't work");
 	return (ret);
 }
 
@@ -79,7 +79,7 @@ long	get_time(t_timecode timecode)
 	if (gettimeofday(&tv, NULL) == -1)
 		exit_error("Could not get time of day");
 	if (SECOND == timecode)
-		return (tv.tv_sec * 1e3 + (tv.tv_usec / 1e6));
+		return (tv.tv_sec + (tv.tv_usec / 1e6));
 	else if (MILLISECOND == timecode)
 		return (tv.tv_sec * 1e3 + (tv.tv_usec / 1e3));
 	else if (MICROSECOND == timecode)
